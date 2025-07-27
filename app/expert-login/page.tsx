@@ -22,7 +22,11 @@ export default function ExpertLoginPage() {
 
     // 担当者認証シミュレーション
     setTimeout(() => {
+<<<<<<< HEAD
       if (employeeId && password) {
+=======
+      if (employeeId && password && typeof window !== "undefined") {
+>>>>>>> bdf7d6e (Initial commit: 酒税相談システム)
         // 既存の担当者データをチェック（模擬）
         const existingExperts = JSON.parse(localStorage.getItem("experts") || "[]")
         const expert = existingExperts.find((exp: any) => exp.employeeId === employeeId)

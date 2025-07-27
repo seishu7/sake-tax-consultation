@@ -15,6 +15,7 @@ export default function ConsultationSummaryPage() {
   const router = useRouter()
 
   useEffect(() => {
+<<<<<<< HEAD
     const userData = localStorage.getItem("user")
     const recordData = localStorage.getItem("pendingConsultationRecord")
 
@@ -25,11 +26,27 @@ export default function ConsultationSummaryPage() {
 
     setUser(JSON.parse(userData))
     setConsultationRecord(JSON.parse(recordData))
+=======
+    // クライアントサイドでのみ実行
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("user")
+      const recordData = localStorage.getItem("pendingConsultationRecord")
+
+      if (!userData || !recordData) {
+        router.push("/login")
+        return
+      }
+
+      setUser(JSON.parse(userData))
+      setConsultationRecord(JSON.parse(recordData))
+    }
+>>>>>>> bdf7d6e (Initial commit: 酒税相談システム)
   }, [router])
 
   const handleSaveAndContinue = async () => {
     setIsSaving(true)
 
+<<<<<<< HEAD
     // 既存の相談記録を取得
     const existingRecords = JSON.parse(localStorage.getItem("consultationRecords") || "[]")
 
@@ -41,6 +58,21 @@ export default function ConsultationSummaryPage() {
     localStorage.removeItem("pendingConsultationRecord")
     localStorage.removeItem("consultationData")
     localStorage.removeItem("analysisData")
+=======
+    if (typeof window !== "undefined") {
+      // 既存の相談記録を取得
+      const existingRecords = JSON.parse(localStorage.getItem("consultationRecords") || "[]")
+
+      // 新しい記録を追加
+      const updatedRecords = [consultationRecord, ...existingRecords]
+      localStorage.setItem("consultationRecords", JSON.stringify(updatedRecords))
+
+      // 一時的な記録データを削除
+      localStorage.removeItem("pendingConsultationRecord")
+      localStorage.removeItem("consultationData")
+      localStorage.removeItem("analysisData")
+    }
+>>>>>>> bdf7d6e (Initial commit: 酒税相談システム)
 
     setTimeout(() => {
       setIsSaving(false)

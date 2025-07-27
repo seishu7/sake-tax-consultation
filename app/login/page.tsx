@@ -22,7 +22,11 @@ export default function LoginPage() {
 
     // 簡単な認証シミュレーション
     setTimeout(() => {
+<<<<<<< HEAD
       if (email && password) {
+=======
+      if (email && password && typeof window !== "undefined") {
+>>>>>>> bdf7d6e (Initial commit: 酒税相談システム)
         localStorage.setItem(
           "user",
           JSON.stringify({

@@ -58,12 +58,24 @@ export default function UploadPage() {
   const router = useRouter()
 
   useEffect(() => {
+<<<<<<< HEAD
     const userData = localStorage.getItem("user")
     if (!userData) {
       router.push("/login")
       return
     }
     setUser(JSON.parse(userData))
+=======
+    // クライアントサイドでのみ実行
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("user")
+      if (!userData) {
+        router.push("/login")
+        return
+      }
+      setUser(JSON.parse(userData))
+    }
+>>>>>>> bdf7d6e (Initial commit: 酒税相談システム)
   }, [router])
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,12 +88,23 @@ export default function UploadPage() {
     e.preventDefault()
     setIsLoading(true)
 
+<<<<<<< HEAD
     const consultationData = {
       files: files.map((f) => ({ name: f.name, size: f.size })),
       content: consultationContent,
       timestamp: new Date().toISOString(),
     }
     localStorage.setItem("consultationData", JSON.stringify(consultationData))
+=======
+    if (typeof window !== "undefined") {
+      const consultationData = {
+        files: files.map((f) => ({ name: f.name, size: f.size })),
+        content: consultationContent,
+        timestamp: new Date().toISOString(),
+      }
+      localStorage.setItem("consultationData", JSON.stringify(consultationData))
+    }
+>>>>>>> bdf7d6e (Initial commit: 酒税相談システム)
 
     setTimeout(() => {
       router.push("/consultation")

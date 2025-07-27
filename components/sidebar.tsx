@@ -53,9 +53,17 @@ export function Sidebar({ user, currentPath }: SidebarProps) {
   }
 
   const handleLogout = () => {
+<<<<<<< HEAD
     localStorage.removeItem("user")
     localStorage.removeItem("consultationData")
     localStorage.removeItem("analysisData")
+=======
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("user")
+      localStorage.removeItem("consultationData")
+      localStorage.removeItem("analysisData")
+    }
+>>>>>>> bdf7d6e (Initial commit: 酒税相談システム)
     router.push("/login")
   }
 

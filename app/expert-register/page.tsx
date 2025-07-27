@@ -49,6 +49,7 @@ export default function ExpertRegisterPage() {
   const router = useRouter()
 
   useEffect(() => {
+<<<<<<< HEAD
     // 既存担当者かチェック
     const currentExpert = localStorage.getItem("currentExpert")
     const newExpertId = localStorage.getItem("newExpertId")
@@ -62,6 +63,24 @@ export default function ExpertRegisterPage() {
       setIsNewUser(true)
     } else {
       router.push("/expert-login")
+=======
+    // クライアントサイドでのみ実行
+    if (typeof window !== "undefined") {
+      // 既存担当者かチェック
+      const currentExpert = localStorage.getItem("currentExpert")
+      const newExpertId = localStorage.getItem("newExpertId")
+
+      if (currentExpert) {
+        const expert = JSON.parse(currentExpert)
+        setFormData(expert)
+        setIsNewUser(false)
+      } else if (newExpertId) {
+        setFormData((prev) => ({ ...prev, employeeId: newExpertId }))
+        setIsNewUser(true)
+      } else {
+        router.push("/expert-login")
+      }
+>>>>>>> bdf7d6e (Initial commit: 酒税相談システム)
     }
   }, [router])
 
@@ -80,6 +99,7 @@ export default function ExpertRegisterPage() {
 
     // 担当者データの保存
     setTimeout(() => {
+<<<<<<< HEAD
       const experts = JSON.parse(localStorage.getItem("experts") || "[]")
 
       if (isNewUser) {
@@ -101,6 +121,31 @@ export default function ExpertRegisterPage() {
         localStorage.setItem("experts", JSON.stringify(updatedExperts))
         localStorage.removeItem("currentExpert")
         alert("担当者情報が更新されました。")
+=======
+      if (typeof window !== "undefined") {
+        const experts = JSON.parse(localStorage.getItem("experts") || "[]")
+
+        if (isNewUser) {
+          // 新規登録
+          const newExpert = {
+            ...formData,
+            id: Date.now().toString(),
+            createdAt: new Date().toISOString(),
+          }
+          experts.push(newExpert)
+          localStorage.setItem("experts", JSON.stringify(experts))
+          localStorage.removeItem("newExpertId")
+          alert("担当者登録が完了しました。")
+        } else {
+          // 既存データの更新
+          const updatedExperts = experts.map((expert: any) =>
+            expert.employeeId === formData.employeeId ? { ...formData, updatedAt: new Date().toISOString() } : expert,
+          )
+          localStorage.setItem("experts", JSON.stringify(updatedExperts))
+          localStorage.removeItem("currentExpert")
+          alert("担当者情報が更新されました。")
+        }
+>>>>>>> bdf7d6e (Initial commit: 酒税相談システム)
       }
 
       router.push("/expert-login")
@@ -109,8 +154,15 @@ export default function ExpertRegisterPage() {
   }
 
   const handleCancel = () => {
+<<<<<<< HEAD
     localStorage.removeItem("currentExpert")
     localStorage.removeItem("newExpertId")
+=======
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("currentExpert")
+      localStorage.removeItem("newExpertId")
+    }
+>>>>>>> bdf7d6e (Initial commit: 酒税相談システム)
     router.push("/expert-login")
   }
 

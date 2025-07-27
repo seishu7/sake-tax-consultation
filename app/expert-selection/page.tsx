@@ -18,7 +18,14 @@ export default function ExpertSelectionPage() {
   const router = useRouter()
 
   // 登録された担当者データを取得、なければデフォルトデータを使用
-  const registeredExperts = JSON.parse(localStorage.getItem("experts") || "[]")
+  const getRegisteredExperts = () => {
+    if (typeof window !== "undefined") {
+      return JSON.parse(localStorage.getItem("experts") || "[]")
+    }
+    return []
+  }
+
+  const registeredExperts = getRegisteredExperts()
   const experts =
     registeredExperts.length > 0
       ? registeredExperts.map((expert: any) => ({
@@ -56,39 +63,45 @@ export default function ExpertSelectionPage() {
   const recommendedExpert = experts[0]
 
   useEffect(() => {
-    const data = localStorage.getItem("analysisData")
-    if (!data) {
-      router.push("/login")
-      return
-    }
+    // クライアントサイドでのみ実行
+    if (typeof window !== "undefined") {
+      const data = localStorage.getItem("analysisData")
+      if (!data) {
+        router.push("/login")
+        return
+      }
 
-    const parsedData = JSON.parse(data)
-    setAnalysisData(parsedData)
+      const parsedData = JSON.parse(data)
+      setAnalysisData(parsedData)
+    }
   }, [router])
 
-  // handleSubmit関数を以下に変更
   const handleSubmit = async () => {
+    if (!analysisData) return
+
     setIsSubmitting(true)
 
-    // 相談記録用のデータを準備
-    const consultationRecord = {
-      id: `CONS-${new Date().getFullYear()}-${String(Date.now()).slice(-3)}`,
-      date: new Date().toISOString().split("T")[0],
-      submittedBy: user.name,
-      department: user.department,
-      expert: recommendedExpert.name,
-      expertTitle: recommendedExpert.title,
-      consultationContent: consultationData.content,
-      files: consultationData.files || [],
-      aiSummary: aiAnalysis.executiveSummary.situation,
-      questions: aiAnalysis.executiveSummary.questionItems.filter((q: string) => q.trim() !== ""),
-      ccEmails: ccEmails.trim() ? ccEmails.split("\n").filter((email) => email.trim()) : [],
-      status: "提出済み",
-      timestamp: new Date().toISOString(),
-    }
+    if (typeof window !== "undefined") {
+      // 相談記録用のデータを準備
+      const consultationRecord = {
+        id: `CONS-${new Date().getFullYear()}-${String(Date.now()).slice(-3)}`,
+        date: new Date().toISOString().split("T")[0],
+        submittedBy: analysisData.user.name,
+        department: analysisData.user.department,
+        expert: recommendedExpert.name,
+        expertTitle: recommendedExpert.title,
+        consultationContent: analysisData.consultationData.content,
+        files: analysisData.consultationData.files || [],
+        aiSummary: analysisData.aiAnalysis.executiveSummary.situation,
+        questions: analysisData.aiAnalysis.executiveSummary.questionItems.filter((q: string) => q.trim() !== ""),
+        ccEmails: ccEmails.trim() ? ccEmails.split("\n").filter((email) => email.trim()) : [],
+        status: "提出済み",
+        timestamp: new Date().toISOString(),
+      }
 
-    // 記録データを保存
-    localStorage.setItem("pendingConsultationRecord", JSON.stringify(consultationRecord))
+      // 記録データを保存
+      localStorage.setItem("pendingConsultationRecord", JSON.stringify(consultationRecord))
+    }
 
     setTimeout(() => {
       // 相談記録画面に遷移
@@ -96,7 +109,18 @@ export default function ExpertSelectionPage() {
     }, 2000)
   }
 
-  if (!analysisData) return null
+  if (!analysisData) {
+    return (
+      <div className="flex h-screen bg-gray-50">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">データを読み込み中...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const { user, consultationData, aiAnalysis } = analysisData
 
@@ -264,7 +288,10 @@ export default function ExpertSelectionPage() {
                 size="lg"
               >
                 {isSubmitting ? (
-                  "相談を提出中..."
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    相談を提出中...
+                  </>
                 ) : (
                   <>
                     <Send className="w-5 h-5 mr-2" />
