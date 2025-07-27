@@ -6,14 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
 import { Sidebar } from "@/components/sidebar"
-import { Users, Send, Mail, FileText, Brain } from "lucide-react"
+import { Users, Send, FileText, Brain } from "lucide-react"
 
 export default function ExpertSelectionPage() {
   const [analysisData, setAnalysisData] = useState<any>(null)
-  const [ccEmails, setCcEmails] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
 
@@ -94,7 +91,7 @@ export default function ExpertSelectionPage() {
         files: analysisData.consultationData.files || [],
         aiSummary: analysisData.aiAnalysis.executiveSummary.situation,
         questions: analysisData.aiAnalysis.executiveSummary.questionItems.filter((q: string) => q.trim() !== ""),
-        ccEmails: ccEmails.trim() ? ccEmails.split("\n").filter((email) => email.trim()) : [],
+        ccEmails: [],
         status: "提出済み",
         timestamp: new Date().toISOString(),
       }
@@ -249,32 +246,6 @@ export default function ExpertSelectionPage() {
                       </p>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* CC設定 */}
-            <Card className="shadow-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Mail className="w-5 h-5 mr-2" />
-                  返信時のCC設定（任意）
-                </CardTitle>
-                <CardDescription>返信メールでCCに追加したい方のメールアドレスを入力してください</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="space-y-2">
-                  <Label htmlFor="cc-emails" className="text-base">
-                    CCメールアドレス
-                  </Label>
-                  <Textarea
-                    id="cc-emails"
-                    placeholder="例：manager@company.com&#10;director@company.com&#10;（複数の場合は改行で区切ってください）"
-                    value={ccEmails}
-                    onChange={(e) => setCcEmails(e.target.value)}
-                    className="min-h-[100px] text-base border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                  />
-                  <p className="text-sm text-gray-500">複数のメールアドレスを入力する場合は改行で区切ってください</p>
                 </div>
               </CardContent>
             </Card>

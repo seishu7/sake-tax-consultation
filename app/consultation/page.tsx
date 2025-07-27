@@ -218,21 +218,6 @@ export default function ConsultationPage() {
   }
 
   useEffect(() => {
-<<<<<<< HEAD
-    const userData = localStorage.getItem("user")
-    const consultData = localStorage.getItem("consultationData")
-
-    if (!userData || !consultData) {
-      router.push("/login")
-      return
-    }
-
-    setUser(JSON.parse(userData))
-    setConsultationData(JSON.parse(consultData))
-
-    // 質問事項を初期化
-    setCustomQuestions(aiAnalysis.executiveSummary.questionItems)
-=======
     // クライアントサイドでのみ実行
     if (typeof window !== "undefined") {
       const userData = localStorage.getItem("user")
@@ -249,7 +234,6 @@ export default function ConsultationPage() {
       // 質問事項を初期化
       setCustomQuestions(aiAnalysis.executiveSummary.questionItems)
     }
->>>>>>> bdf7d6e (Initial commit: 酒税相談システム)
   }, [router])
 
   const handleQuestionChange = (index: number, value: string) => {
@@ -268,21 +252,6 @@ export default function ConsultationPage() {
   }
 
   const handleProceedToExpertSelection = () => {
-<<<<<<< HEAD
-    // AI分析結果と相談データを保存
-    const analysisData = {
-      aiAnalysis: {
-        ...aiAnalysis,
-        executiveSummary: {
-          ...aiAnalysis.executiveSummary,
-          questionItems: customQuestions.filter((q) => q.trim() !== ""),
-        },
-      },
-      consultationData,
-      user,
-    }
-    localStorage.setItem("analysisData", JSON.stringify(analysisData))
-=======
     if (typeof window !== "undefined") {
       // AI分析結果と相談データを保存
       const analysisData = {
@@ -298,7 +267,6 @@ export default function ConsultationPage() {
       }
       localStorage.setItem("analysisData", JSON.stringify(analysisData))
     }
->>>>>>> bdf7d6e (Initial commit: 酒税相談システム)
     router.push("/expert-selection")
   }
 
